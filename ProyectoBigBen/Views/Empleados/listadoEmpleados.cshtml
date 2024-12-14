@@ -1,0 +1,124 @@
+﻿@model IEnumerable<ProyectoBigBen.Models.Empleados>
+
+@{
+    ViewData["Title"] = "Lista de empleados";
+}
+
+<h1>Lista de Empleados</h1>
+
+<p>
+    <form asp-action="RegistrarEmpleado" method="get">
+        <button type="submit" class="btn btn-primary">Registrar Empleado</button>
+    </form>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_empleado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre_empleado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.apellido_empleado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.rol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.telefono)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre_empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.apellido_empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.telefono)
+            </td>
+            <td>
+                    @Html.ActionLink("Editar", "EditarEmpleado", new { id = item.id_empleado }, new { @class = "btn btn-warning", @role = "button" }) |
+                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                    @Html.ActionLink("Eliminar", "EliminarEmpleado", new { id = item.id_empleado }, new { @class = "btn btn-danger", @role = "button", @id = "eliminar" })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div style="text-align:center">
+    @for (int i = 0; i < (int)ViewBag.paginas; i++)
+    {
+        @Html.ActionLink((i + 1).ToString(), "listadoEmpleados", "Empleados", new { p = i }, new { @class = "btn btn-primary", style = "margin-right: 5px;" })
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("tr #eliminar").click(function (e) {
+                e.preventDefault();
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success",
+                        cancelButton: "btn btn-danger"
+                    },
+                    buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Estás seguro?",
+                    text: "Esto no se va a poder revertir!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminalo!",
+                    cancelButtonText: "No, cancela!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const url = $(this).attr("href");
+                        $.ajax({
+                            url: url, 
+                            type: 'POST',
+                            success: function (response) {
+                                swalWithBootstrapButtons.fire({
+                                    title: "Eliminado!",
+                                    text: "El registro ha sido eliminado.",
+                                    icon: "success"
+                                }).then(() => {
+                                    window.location.href = '/Empleados/listadoEmpleados';
+                                });
+                            },
+                            error: function () {
+                                swalWithBootstrapButtons.fire({
+                                    title: "Error!",
+                                    text: "Hubo un error al tratar de eliminar.",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelado",
+                            text: "El registro no se eliminó",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+}

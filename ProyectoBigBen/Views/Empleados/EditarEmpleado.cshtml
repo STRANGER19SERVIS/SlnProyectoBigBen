@@ -1,0 +1,49 @@
+﻿@model ProyectoBigBen.Models.Empleados
+
+@{
+    ViewData["Title"] = "Editar Empleado";
+}
+
+<h1>Editar Empleado</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditarEmpleado">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="id_empleado" class="control-label">Codigo del empleado</label>
+                <input asp-for="id_empleado" class="form-control" readonly/>
+                <span asp-validation-for="id_empleado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nombre_empleado" class="control-label">Nombre del Empleado</label>
+                <input asp-for="nombre_empleado" class="form-control" />
+                <span asp-validation-for="nombre_empleado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="apellido_empleado" class="control-label">Apellidos del Empleado</label>
+                <input asp-for="apellido_empleado" class="form-control" />
+                <span asp-validation-for="apellido_empleado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="rol" class="control-label">Rol</label>
+                <input asp-for="rol" class="form-control" />
+                <span asp-validation-for="rol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="telefono" class="control-label">Telefono</label>
+                <input asp-for="telefono" class="form-control" />
+                <span asp-validation-for="telefono" class="text-danger"></span>
+            </div> <br />
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" /> |
+                <a asp-action="listadoEmpleados" class="btn btn-warning">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
